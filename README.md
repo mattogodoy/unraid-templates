@@ -1,32 +1,53 @@
-# Community Apps Starter Template
+# Unraid templates for Nametag
 
-Use this repository as a GitHub template when you want a clean starting point for a new Community Apps submission repository.
+[Community Applications](https://ca.unraid.net/) templates for
+[Nametag](https://nametag.one), an open-source personal CRM. The app itself
+lives at [mattogodoy/nametag](https://github.com/mattogodoy/nametag).
 
-## Quick Start
+## Installing Nametag on Unraid
 
-1. Click **Use this template** on GitHub and create your own repository.
-2. Replace the placeholder values in `ca_profile.xml`, `templates/example-app.xml`, and `plugins/example-plugin.xml`.
-3. Replace `icon.svg` with your own repository icon, or update `ca_profile.xml` to point at a hosted icon you control.
-4. Keep one XML file per Docker app under `templates/`.
-5. Keep one XML wrapper per plugin under `plugins/`.
-6. Delete the example files you do not need.
-7. Commit and push your repository.
-8. Run **Validate** and **Scan** in the Community Apps submit flow: `/submit`.
+The template installs the Nametag container only. It needs a PostgreSQL
+database alongside it.
 
-## Starter Files
+1. **PostgreSQL.** Install a PostgreSQL container from Community Applications
+   (the official `postgres` image, version 14 or newer). Create a database and
+   user for Nametag, and note the server's IP, port, user and password.
+2. **Photo folder.** The container runs as UID 1001. In the Unraid terminal, run:
 
-- `README.md`: onboarding notes for whoever maintains the repository.
-- `LICENSE`: starter MIT license text. Replace the placeholder copyright line.
-- `.gitignore`: keeps common OS junk out of the repo.
-- `icon.svg`: starter repository icon referenced by `ca_profile.xml`.
-- `ca_profile.xml`: repository overview and support metadata shown in Community Apps.
-- `templates/example-app.xml`: starter Docker application template.
-- `plugins/example-plugin.xml`: starter plugin wrapper.
+   ```bash
+   mkdir -p /mnt/user/appdata/nametag/photos
+   chown -R 1001:1001 /mnt/user/appdata/nametag
+   ```
 
-## Submission Notes
+3. **Install.** In **Apps**, search for **Nametag** and click **Install**.
+   Generate two secrets with `openssl rand -base64 32` and paste them into
+   **Auth secret** and **Cron secret**. Set **App URL** to the address you open
+   Nametag at, fill in the database fields, and click **Apply**.
+4. **Background jobs.** Reminders, CardDAV sync, cleanup and geocoding run when
+   something calls Nametag's cron endpoints. With the **User Scripts** plugin,
+   create one script per job:
 
-- Keep `ca_profile.xml` in the repository root.
-- Every Docker app entry needs a `<Repository>` tag.
-- Every plugin entry needs a `<PluginURL>` tag.
-- Keep each template's `TemplateURL` pointed at the raw GitHub URL for that exact XML file.
-- Use an OSI-approved license before submitting.
+   ```bash
+   #!/bin/bash
+   NAMETAG_URL="http://192.168.1.10:3000"
+   CRON_SECRET="your-cron-secret"
+   curl -fsS -H "Authorization: Bearer $CRON_SECRET" "$NAMETAG_URL/api/cron/send-reminders"
+   ```
+
+   | Job | Endpoint | Suggested schedule |
+   |---|---|---|
+   | Reminders | `send-reminders` | `0 8 * * *` |
+   | Cleanup | `purge-deleted` | `0 3 * * *` |
+   | CardDAV sync | `carddav-sync` | `0 2,10,18 * * *` |
+   | Geocoding | `geocode` | `*/5 * * * *` |
+
+Optional settings such as Redis and SMTP are not in the template. To use one,
+click **Add another Path, Port, Variable, Label or Device**, choose
+**Variable**, and enter the name and value from the
+[configuration docs](https://docs.nametag.one/self-hosting/configuration/).
+
+Full self-hosting docs: https://docs.nametag.one/self-hosting/
+
+## Support
+
+Open an issue at https://github.com/mattogodoy/nametag/issues.
