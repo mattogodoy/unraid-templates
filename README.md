@@ -41,10 +41,12 @@ database alongside it.
    | CardDAV sync | `carddav-sync` | `0 2,10,18 * * *` |
    | Geocoding | `geocode` | `*/5 * * * *` |
 
-Optional settings such as Redis and SMTP are not in the template. To use one,
-click **Add another Path, Port, Variable, Label or Device**, choose
-**Variable**, and enter the name and value from the
-[configuration docs](https://docs.nametag.one/self-hosting/configuration/).
+Redis and SMTP settings are under **Show more settings**. Leave them empty if
+you don't use them. Email needs `EMAIL_DOMAIN`, `SMTP_HOST`, `SMTP_PORT`,
+`SMTP_USER` and `SMTP_PASS`; see the
+[email docs](https://docs.nametag.one/self-hosting/email/). For anything else,
+click **Add another Path, Port, Variable, Label or Device** and use a name from
+the [configuration docs](https://docs.nametag.one/self-hosting/configuration/).
 
 Full self-hosting docs: https://docs.nametag.one/self-hosting/
 

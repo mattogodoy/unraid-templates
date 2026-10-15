@@ -21,7 +21,7 @@ Reminders and CardDAV sync need scheduled calls. The Read Me link has ready-to-p
   <WebUI>http://[IP]:[PORT:3000]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/mattogodoy/unraid-templates/main/templates/nametag.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/mattogodoy/nametag/master/public/icons/icon-512.png</Icon>
-  <Requires>A PostgreSQL 14+ database (for example the official postgres container). Redis is optional.</Requires>
+  <Requires>A PostgreSQL 14+ database (for example the official postgres container). Redis and SMTP are optional.</Requires>
   <License>AGPL-3.0</License>
   <Screenshot>https://raw.githubusercontent.com/mattogodoy/unraid-templates/main/screenshots/screenshot-1.png</Screenshot>
   <Screenshot>https://raw.githubusercontent.com/mattogodoy/unraid-templates/main/screenshots/screenshot-2.png</Screenshot>
@@ -39,4 +39,14 @@ Reminders and CardDAV sync need scheduled calls. The Read Me link has ready-to-p
   <Config Name="Database user" Target="DB_USER" Default="nametag" Mode="" Description="PostgreSQL user." Type="Variable" Display="always" Required="true" Mask="false">nametag</Config>
   <Config Name="Database password" Target="DB_PASSWORD" Default="" Mode="" Description="PostgreSQL password." Type="Variable" Display="always" Required="true" Mask="true"/>
   <Config Name="Disable registration" Target="DISABLE_REGISTRATION" Default="false" Mode="" Description="Set to true after creating your account to stop others from signing up." Type="Variable" Display="always" Required="false" Mask="false">false</Config>
+  <Config Name="Redis URL" Target="REDIS_URL" Default="" Mode="" Description="Optional. For example redis://192.168.1.10:6379. Without it, rate limiting uses memory." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="Redis password" Target="REDIS_PASSWORD" Default="" Mode="" Description="Optional. Only if your Redis needs a password." Type="Variable" Display="advanced" Required="false" Mask="true"></Config>
+  <Config Name="Email domain" Target="EMAIL_DOMAIN" Default="" Mode="" Description="Domain emails are sent from, for example example.com. Needed to send email." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="SMTP host" Target="SMTP_HOST" Default="" Mode="" Description="Optional. SMTP server for reminder and password-reset emails." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="SMTP port" Target="SMTP_PORT" Default="" Mode="" Description="587 for STARTTLS or 465 for SSL." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="SMTP secure" Target="SMTP_SECURE" Default="" Mode="" Description="true for port 465, false for 587. Default false." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="SMTP require TLS" Target="SMTP_REQUIRE_TLS" Default="" Mode="" Description="Require STARTTLS. Default true." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="SMTP user" Target="SMTP_USER" Default="" Mode="" Description="SMTP username, often your email address." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="SMTP password" Target="SMTP_PASS" Default="" Mode="" Description="SMTP password or app password." Type="Variable" Display="advanced" Required="false" Mask="true"></Config>
+  <Config Name="SMTP from" Target="SMTP_FROM" Default="" Mode="" Description="Optional. Override the from address if your server rejects custom ones." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
 </Container>
